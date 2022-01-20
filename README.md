@@ -15,7 +15,7 @@ git clone https://github.com/ReubenDo/SlicerSkinExtractor.git
 
 ### Option 2
 
-[Download the zipped directory](https://github.com/ReubenDo/SlicerSkinExtractor/archive/refs/heads/master.zip) and unzip it.
+[Download the zipped directory](https://github.com/ReubenDo/SlicerSkinExtractor/archive/refs/heads/main.zip) and unzip it.
 
 ### Add directory in Slicer
 
