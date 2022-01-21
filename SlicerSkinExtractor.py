@@ -1,14 +1,13 @@
 import os
-import unittest
 import logging
-import vtk, qt, ctk, slicer
+import vtk
+import slicer
 from slicer.ScriptedLoadableModule import *
 from slicer.util import VTKObservationMixin
 import sitkUtils as su
 import SimpleITK as sitk
-import numpy as np
 
-from script import morphological_chan_vese_fillhole_2d_new
+from src.SlicerSkinExtractorAlgorithm import morphological_chan_vese_fillhole_2d_new
 
 #
 # SlicerSkinExtractor

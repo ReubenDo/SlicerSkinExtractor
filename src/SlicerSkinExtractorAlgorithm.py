@@ -17,7 +17,7 @@ except:
     from skimage.measure import label
     from skimage.segmentation import find_boundaries  
 
-from ThirdParty.utils import nib_to_sitk, sitk_to_nib
+from ThirdParty.TorchIOUtils import nib_to_sitk, sitk_to_nib
 import SimpleITK as sitk
 
 def reorient_acquisition(acquisition_order):
