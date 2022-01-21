@@ -23,4 +23,6 @@ In Slicer, go to `Edit -> Application Settings -> Modules` and add the cloned/do
 
 ## Algorithm description
 
+![Brain Skin Extractor module](./screenshots/example.png)
+
 TODO
