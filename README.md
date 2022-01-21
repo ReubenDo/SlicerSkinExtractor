@@ -1,6 +1,6 @@
 # Skin surface extraction
 
-This repository contains the code for a Slicer modules that can be used to extract the skin surface on different brain imaging modalities (CT, MR) and different sequences (T1, T2, FLAIR etc).
+This repository contains the code for a Slicer module that can be used to automatically extract the skin surface on different brain imaging modalities (CT, MR) and different sequences (T1, T2, FLAIR, etc).
 
 This is a project for the [36th NA-MIC Project Week](https://github.com/NA-MIC/ProjectWeek/tree/master/PW36_2022_Virtual/Projects/Skin).
 
@@ -21,6 +21,6 @@ git clone https://github.com/ReubenDo/SlicerSkinExtractor.git
 
 In Slicer, go to `Edit -> Application Settings -> Modules` and add the cloned/downloaded folder to the `Additional module paths`. When prompted, restart Slicer.
 
-## Skin Surfac extraction
+## Algorithm description
 
 TODO
