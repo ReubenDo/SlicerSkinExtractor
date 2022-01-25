@@ -2,7 +2,7 @@
 
 This repository contains the code for a Slicer module that can be used to automatically extract the skin surface on different brain imaging modalities (CT, MR) and different sequences (T1, T2, FLAIR, etc).
 
-This is a project for the [36th NA-MIC Project Week](https://github.com/NA-MIC/ProjectWeek/tree/master/PW36_2022_Virtual/Projects/Skin).
+This is a project for the [36th NA-MIC Project Week](https://projectweek.na-mic.org/PW36_2022_Virtual/Projects/SkinSegmentation/).
 
 ## Installation
 
