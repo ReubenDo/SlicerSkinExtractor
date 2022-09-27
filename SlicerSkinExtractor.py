@@ -6,6 +6,7 @@ from slicer.ScriptedLoadableModule import *
 from slicer.util import VTKObservationMixin
 import sitkUtils as su
 import SimpleITK as sitk
+import vtkSegmentationCorePython as vtkSegmentationCore
 
 from src.SlicerSkinExtractorAlgorithm import morphological_chan_vese_fillhole_2d_new
 
@@ -328,6 +329,14 @@ class SlicerSkinExtractorLogic(ScriptedLoadableModuleLogic):
     slicer.modules.segmentations.logic().ImportLabelmapToSegmentationNode(labelmapVolumeNode, outputVolume)
     outputVolume.CreateClosedSurfaceRepresentation()
     slicer.mrmlScene.RemoveNode(labelmapVolumeNode)
+
+    segmentation = vtkSegmentationCore.vtkSegmentation()
+    # Turn of surface smoothing
+    segmentation.SetConversionParameter("Smoothing factor","1.0")
+
+    # Recreate representation using modified parameters (and default conversion path)
+    segmentation.RemoveRepresentation(vtkSegmentationCore.vtkSegmentationConverter.GetSegmentationClosedSurfaceRepresentationName())
+    segmentation.CreateRepresentation(vtkSegmentationCore.vtkSegmentationConverter.GetSegmentationClosedSurfaceRepresentationName())
     
     stopTime = time.time()
     logging.info(f'Processing completed in {stopTime-startTime:.2f} seconds')
