@@ -23,6 +23,10 @@ except:
 from ThirdParty.TorchIOUtils import nib_to_sitk, sitk_to_nib
 import SimpleITK as sitk
 
+
+kernel = (1,1,5)
+sma = torch.nn.AvgPool3d(kernel_size=kernel, stride = 1, padding=(0,0,2), count_include_pad=True)
+
 def reorient_acquisition(acquisition_order):
     if acquisition_order in ["IS", "SI"]:
         return (2,2)
@@ -120,7 +124,7 @@ def levelset_update_3d(u, image, c0=None, c1=None):
     u = ndi.binary_fill_holes(u, structure=_STRUC3).astype(np.int8)
     u = np.swapaxes(ndi.binary_fill_holes(np.swapaxes(u,0,2),structure=_STRUC3).astype(np.int8),0,2)
     u = np.swapaxes(ndi.binary_fill_holes(np.swapaxes(u,1,2),structure=_STRUC3).astype(np.int8),1,2)
-    
+
     return u.astype(np.uint8)
 
 
@@ -177,6 +181,7 @@ def morphological_chan_vese_fillhole_2d_new(image: sitk.Image, orientation):
 
     img_nib_can = nibabel.as_closest_canonical(img_nib)
     image_data = img_nib_can.get_fdata()
+    #image_data = np.abs(np.stack(np.gradient(image_data),0)).sum(0)
     affine = img_nib_can.affine
     reorient_axis = reorient_acquisition(orientation)
     
@@ -226,16 +231,30 @@ def morphological_chan_vese_fillhole_2d_new(image: sitk.Image, orientation):
     
 
      # 3D Level set
-    iterations = [25, 10, 5]
-    #iterations = [1, 1, 1]
+    #iterations = [25, 10, 5]
+    iterations = [3, 1]
     progressDialog2 = slicer.util.createProgressDialog(
         value=0,
         maximum=sum(iterations),
         windowTitle='Second phase in 3D...',
       )
+
+    # Bias field correction
+    c1 = np.mean(image_data_reoriented[u>0])
+    masked = np.ma.masked_where(u==0, image_data_reoriented)
+    mean = masked.mean(axis=(0,1))
+    mean = mean.filled(1)
+    mean = 1.5*c1/(mean+0.5*c1)
+
+    u_dilated = ndi.binary_dilation(u,iterations=5)
+
+    or_type = image_data_reoriented.dtype
+    image_data_reoriented = image_data_reoriented*(u_dilated*mean + (1-u_dilated))
+    image_data_reoriented = image_data_reoriented.astype(or_type)
+
     progress_bar_i = 0
     start_time = time.time()
-    for it in range(3):
+    for it in range(len(iterations)):
         #processed = np.stack([mark_boundaries(u2[...,k], u2[...,k]==1).sum(-1) for k in range(u2.shape[-1])],-1)
         processed = np.stack([find_boundaries(u[...,k],mode='inner') for k in range(u.shape[-1])],-1)
         
@@ -264,14 +283,12 @@ def morphological_chan_vese_fillhole_2d_new(image: sitk.Image, orientation):
     u_reorient = np.swapaxes(u, reorient_axis[1], reorient_axis[0])[None,...]
     output = nib_to_sitk(u_reorient, affine)
 
-    t = time.time()
     output = sitk.Resample(
     output,
     image,
     sitk.Transform(),
     sitk.sitkNearestNeighbor,
     )
-    print(f"resampling time {t-time.time()}")
 
     u_sitk, affine_sitk = sitk_to_nib(output)
     u_nib = nibabel.Nifti1Image(u_sitk.squeeze(), affine_sitk)
@@ -295,6 +312,17 @@ def morphological_chan_vese_fillhole_2d_new(image: sitk.Image, orientation):
     image_data_reoriented = quantisize(image_data_reoriented)
     x_shape, y_shape, z_shape = image_data_reoriented.shape
     image_data_reoriented = replace_second_min(image_data_reoriented)
+    
+    # Biais field correctionpr
+    c1 = np.mean(image_data_reoriented[u>0])
+    masked = np.ma.masked_where(u==0, image_data_reoriented)
+    mean = masked.mean(axis=(0,1))
+    mean = mean.filled(1)
+    mean = 1.5*c1/(mean+0.5*c1)
+    or_type = image_data_reoriented.dtype
+    u_dilated = ndi.binary_dilation(u,iterations=5)
+    image_data_reoriented = image_data_reoriented*(u_dilated*mean + (1-u_dilated))
+    image_data_reoriented = image_data_reoriented.astype(or_type)
 
      # 3D Level set
     iterations = [5,5]
