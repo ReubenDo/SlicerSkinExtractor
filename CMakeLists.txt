@@ -3,6 +3,8 @@ set(MODULE_NAME SkinExtractor)
 
 #-----------------------------------------------------------------------------
 set(MODULE_PYTHON_SCRIPTS
+  src/${MODULE_NAME}Algorithm.py
+  ThirdParty/TorchIOUtils.py
   ${MODULE_NAME}.py
   )
 

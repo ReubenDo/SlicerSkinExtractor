@@ -8,14 +8,14 @@ import sitkUtils as su
 import SimpleITK as sitk
 import vtkSegmentationCorePython as vtkSegmentationCore
 
-from src.SlicerSkinExtractorAlgorithm import morphological_chan_vese_fillhole_2d_new
+from src.SkinExtractorAlgorithm import morphological_chan_vese_fillhole_2d_new
 
 #
-# SlicerSkinExtractor
+# SkinExtractor
 #
 REPO = 'https://github.com/ReubenDo/SlicerSkinExtractor/'
 
-class SlicerSkinExtractor(ScriptedLoadableModule):
+class SkinExtractor(ScriptedLoadableModule):
   """Uses ScriptedLoadableModule base class, available at:
   https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
   """
@@ -88,9 +88,9 @@ def registerSampleData():
   )
 
 #
-# SlicerSkinExtractorWidget
+# SkinExtractorWidget
 #
-class SlicerSkinExtractorWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
+class SkinExtractorWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
   """Uses ScriptedLoadableModuleWidget base class, available at:
   https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
   """
@@ -113,7 +113,7 @@ class SlicerSkinExtractorWidget(ScriptedLoadableModuleWidget, VTKObservationMixi
 
     # Load widget from .ui file (created by Qt Designer).
     # Additional widgets can be instantiated manually and added to self.layout.
-    uiWidget = slicer.util.loadUI(self.resourcePath('UI/SlicerSkinExtractor.ui'))
+    uiWidget = slicer.util.loadUI(self.resourcePath('UI/SkinExtractor.ui'))
     self.layout.addWidget(uiWidget)
     self.ui = slicer.util.childWidgetVariables(uiWidget)
 
@@ -124,7 +124,7 @@ class SlicerSkinExtractorWidget(ScriptedLoadableModuleWidget, VTKObservationMixi
 
     # Create logic class. Logic implements all computations that should be possible to run
     # in batch mode, without a graphical user interface.
-    self.logic = SlicerSkinExtractorLogic()
+    self.logic = SkinExtractorLogic()
 
     # Connections
 
@@ -273,10 +273,10 @@ class SlicerSkinExtractorWidget(ScriptedLoadableModuleWidget, VTKObservationMixi
 
 
 #
-# SlicerSkinExtractorLogic
+# SkinExtractorLogic
 #
 
-class SlicerSkinExtractorLogic(ScriptedLoadableModuleLogic):
+class SkinExtractorLogic(ScriptedLoadableModuleLogic):
   """This class should implement all the actual
   computation done by your module.  The interface
   should be such that other python code can import
@@ -342,10 +342,10 @@ class SlicerSkinExtractorLogic(ScriptedLoadableModuleLogic):
     logging.info(f'Processing completed in {stopTime-startTime:.2f} seconds')
 
 #
-# SlicerSkinExtractorTest
+# SkinExtractorTest
 #
 
-class SlicerSkinExtractorTest(ScriptedLoadableModuleTest):
+class SkinExtractorTest(ScriptedLoadableModuleTest):
   """
   This is the test case for your scripted module.
   Uses ScriptedLoadableModuleTest base class, available at:
@@ -388,7 +388,7 @@ class SlicerSkinExtractorTest(ScriptedLoadableModuleTest):
 
     # Test the module logic
 
-    logic = SlicerSkinExtractorLogic()
+    logic = SkinExtractorLogic()
 
     # Test algorithm 
     logic.process(inputVolume, outputVolume)
