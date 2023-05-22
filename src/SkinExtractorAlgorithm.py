@@ -12,6 +12,7 @@ try:
    import torch 
 except:
   slicer.util.pip_install('torch')
+  import torch
 try:
    from skimage.measure import label
    from skimage.segmentation import find_boundaries  
@@ -135,8 +136,8 @@ def replace_second_min(a):
     return a
 
 
-def morphological_chan_vese_fillhole_2d_new(image: sitk.Image, orientation):
-    """Morphological Active Contours without Edges (MorphACWE)
+def morphological_chan_vese_fillhole_2d_new(image: sitk.Image, orientation: str):
+    """ Adaptation of Morphological Active Contours without Edges (MorphACWE)
     Active contours without edges implemented with morphological operators. It
     can be used to segment objects in images and volumes without well defined
     borders. It is required that the inside of the object looks different on
